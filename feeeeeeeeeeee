@@ -1,0 +1,666 @@
+# --// Painel Feeling <3 — Completo (neve +++ / anim min-max / emotes fix)
+--// Original: ZoeWarOnTop | Edição: Raveely
+
+local E = game:GetService("Players")
+local i = game:GetService("SoundService")
+local Y = game:GetService("RunService")
+local j = game:GetService("UserInputService")
+local TweenService = game:GetService("TweenService")
+local o = (settings()):GetService("NetworkSettings")
+local k = game:GetService("Lighting")
+local M = E.LocalPlayer
+local U = M:WaitForChild("PlayerGui")
+local p = Color3.fromRGB(175,203,227)   -- AFCBE3 (Desativado)
+local q = Color3.fromRGB(201,222,239)   -- C9DEEF (Ativado)
+
+local N = Instance.new("ScreenGui")
+N.Name = "ControlPanelGui"
+N.ResetOnSpawn = false
+N.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+N.Parent = U
+
+-- ═══════════════════════════════════════════
+-- PAINEL
+-- ═══════════════════════════════════════════
+local TAM_FECHADO = UDim2.new(0,0,0,0)
+local TAM_ABERTO  = UDim2.new(0,220,0,395)
+local TAM_MIN     = UDim2.new(0,220,0,35)
+
+local c = Instance.new("Frame")
+c.Name = "MainFrame"
+c.Size = TAM_ABERTO
+c.AnchorPoint = Vector2.new(0.5,0.5)
+c.Position = UDim2.new(0.5,0,0.5,0)
+c.BackgroundColor3 = Color3.fromRGB(230,241,250)
+c.Active = true
+c.Draggable = true
+c.ClipsDescendants = true
+c.ZIndex = 1
+c.Parent = N
+
+local V = Instance.new("UICorner")
+V.CornerRadius = UDim.new(0,10)
+V.Parent = c
+
+-- ❄️ Camada de neve
+local snowLayer = Instance.new("Frame")
+snowLayer.Name = "SnowLayer"
+snowLayer.Size = UDim2.new(1,0,1,0)
+snowLayer.Position = UDim2.new(0,0,0,0)
+snowLayer.BackgroundTransparency = 1
+snowLayer.BorderSizePixel = 0
+snowLayer.ZIndex = 2
+snowLayer.ClipsDescendants = true
+snowLayer.Parent = c
+
+local P = Instance.new("TextLabel")
+P.Name = "Title"
+P.Size = UDim2.new(1,-35,0,35)
+P.Position = UDim2.new(0,10,0,0)
+P.BackgroundTransparency = 1
+P.Text = "Painel Feeling <3"
+P.TextColor3 = Color3.fromRGB(60,80,100)
+P.Font = Enum.Font.SourceSansBold
+P.TextSize = 16
+P.TextXAlignment = Enum.TextXAlignment.Left
+P.ZIndex = 5
+P.Parent = c
+
+local u = Instance.new("TextButton")
+u.Name = "MinimizeButton"
+u.Size = UDim2.new(0,25,0,25)
+u.Position = UDim2.new(1,-30,0,5)
+u.BackgroundColor3 = p
+u.TextColor3 = Color3.fromRGB(60,80,100)
+u.Text = "-"
+u.Font = Enum.Font.SourceSansBold
+u.TextSize = 18
+u.ZIndex = 5
+u.Parent = c
+
+local Z = Instance.new("UICorner")
+Z.CornerRadius = UDim.new(0,6)
+Z.Parent = u
+
+local f = Instance.new("Frame")
+f.Name = "ContentFrame"
+f.Size = UDim2.new(1,0,1,-35)
+f.Position = UDim2.new(0,0,0,35)
+f.BackgroundTransparency = 1
+f.ZIndex = 5
+f.Parent = c
+
+-- ═══════════════════════════════════════════
+-- BOTÕES
+-- ═══════════════════════════════════════════
+local v = Instance.new("TextButton")
+v.Name = "BtnOldAnim"
+v.Size = UDim2.new(.88,0,0,35)
+v.Position = UDim2.new(.06,0,0,5)
+v.BackgroundColor3 = p
+v.TextColor3 = Color3.fromRGB(60,80,100)
+v.Text = "Old Animation: Desativado"
+v.Font = Enum.Font.SourceSans
+v.TextSize = 15
+v.Parent = f
+local z = Instance.new("UICorner")
+z.CornerRadius = UDim.new(0,6)
+z.Parent = v
+
+local x = Instance.new("TextButton")
+x.Name = "BtnSpeed"
+x.Size = UDim2.new(.88,0,0,35)
+x.Position = UDim2.new(.06,0,0,48)
+x.BackgroundColor3 = p
+x.TextColor3 = Color3.fromRGB(60,80,100)
+x.Text = "Speed: Desativado"
+x.Font = Enum.Font.SourceSans
+x.TextSize = 15
+x.Parent = f
+local F = Instance.new("UICorner")
+F.CornerRadius = UDim.new(0,6)
+F.Parent = x
+
+local J = Instance.new("TextButton")
+J.Name = "BtnSoundGun"
+J.Size = UDim2.new(.88,0,0,35)
+J.Position = UDim2.new(.06,0,0,91)
+J.BackgroundColor3 = p
+J.TextColor3 = Color3.fromRGB(60,80,100)
+J.Text = "Sound Gun: Desativado"
+J.Font = Enum.Font.SourceSans
+J.TextSize = 15
+J.Parent = f
+local Q = Instance.new("UICorner")
+Q.CornerRadius = UDim.new(0,6)
+Q.Parent = J
+
+local R = Instance.new("TextButton")
+R.Name = "BtnOldShift"
+R.Size = UDim2.new(.88,0,0,35)
+R.Position = UDim2.new(.06,0,0,134)
+R.BackgroundColor3 = p
+R.TextColor3 = Color3.fromRGB(60,80,100)
+R.Text = "Old Shift: Desativado"
+R.Font = Enum.Font.SourceSans
+R.TextSize = 15
+R.Parent = f
+local X = Instance.new("UICorner")
+X.CornerRadius = UDim.new(0,6)
+X.Parent = R
+
+local e = Instance.new("TextButton")
+e.Name = "BtnCameraOld"
+e.Size = UDim2.new(.88,0,0,35)
+e.Position = UDim2.new(.06,0,0,177)
+e.BackgroundColor3 = p
+e.TextColor3 = Color3.fromRGB(60,80,100)
+e.Text = "Camera Old: Desativado"
+e.Font = Enum.Font.SourceSans
+e.TextSize = 15
+e.Parent = f
+local g = Instance.new("UICorner")
+g.CornerRadius = UDim.new(0,6)
+g.Parent = e
+
+local w = Instance.new("TextButton")
+w.Name = "BtnConfete"
+w.Size = UDim2.new(.88,0,0,35)
+w.Position = UDim2.new(.06,0,0,220)
+w.BackgroundColor3 = p
+w.TextColor3 = Color3.fromRGB(60,80,100)
+w.Text = "Confete: Desativado"
+w.Font = Enum.Font.SourceSans
+w.TextSize = 15
+w.Parent = f
+local r = Instance.new("UICorner")
+r.CornerRadius = UDim.new(0,6)
+r.Parent = w
+
+local btnCoil = Instance.new("TextButton")
+btnCoil.Name = "BtnCoil"
+btnCoil.Size = UDim2.new(.88,0,0,35)
+btnCoil.Position = UDim2.new(.06,0,0,263)
+btnCoil.BackgroundColor3 = p
+btnCoil.TextColor3 = Color3.fromRGB(60,80,100)
+btnCoil.Text = "Gravity Coil: Desativado"
+btnCoil.Font = Enum.Font.SourceSans
+btnCoil.TextSize = 15
+btnCoil.Parent = f
+local rc = Instance.new("UICorner")
+rc.CornerRadius = UDim.new(0,6)
+rc.Parent = btnCoil
+
+local btnEmotes = Instance.new("TextButton")
+btnEmotes.Name = "BtnEmotes"
+btnEmotes.Size = UDim2.new(.88,0,0,35)
+btnEmotes.Position = UDim2.new(.06,0,0,306)
+btnEmotes.BackgroundColor3 = p
+btnEmotes.TextColor3 = Color3.fromRGB(60,80,100)
+btnEmotes.Text = "Emotes: Desativado"
+btnEmotes.Font = Enum.Font.SourceSans
+btnEmotes.TextSize = 15
+btnEmotes.Parent = f
+local rce = Instance.new("UICorner")
+rce.CornerRadius = UDim.new(0,6)
+rce.Parent = btnEmotes
+
+-- ═══════════════════════════════════════════
+-- ❄️ FLOCOS DE NEVE (60)
+-- ═══════════════════════════════════════════
+local function criarFloco()
+    local floco = Instance.new("Frame")
+    local tamanho = math.random(4,8)
+    floco.Size = UDim2.new(0,tamanho,0,tamanho)
+    floco.BackgroundColor3 = Color3.fromRGB(255,255,255)
+    floco.BackgroundTransparency = math.random(5,30)/100
+    floco.BorderSizePixel = 0
+    floco.ZIndex = 1
+    floco.Position = UDim2.new(math.random(),0,-0.15,0)
+
+    local corner = Instance.new("UICorner")
+    corner.CornerRadius = UDim.new(1,0)
+    corner.Parent = floco
+
+    floco.Parent = snowLayer
+
+    local function cair()
+        if not floco.Parent then return end
+        local duracao = math.random(4,9)
+        local destinoX = math.random()
+        floco.Position = UDim2.new(math.random(),0,-0.15,0)
+        local tween = TweenService:Create(floco,TweenInfo.new(duracao,Enum.EasingStyle.Linear),{
+            Position = UDim2.new(destinoX,0,1.15,0)
+        })
+        tween:Play()
+        tween.Completed:Connect(function()
+            if floco.Parent then cair() end
+        end)
+    end
+    cair()
+end
+
+for idx = 1,60 do
+    task.spawn(function()
+        task.wait(math.random(0,80)/100)
+        criarFloco()
+    end)
+end
+
+-- ═══════════════════════════════════════════
+-- 🍎 ANIMAÇÃO ESTILO IPHONE + MIN/MAX ANIMADO
+-- ═══════════════════════════════════════════
+local panelOpen = true
+local panelMinimizado = false
+local animando = false
+local posicaoBase = UDim2.new(0.5,0,0.5,0)
+
+local function animarAltura(novaAltura, duracao, estilo, direcao)
+    local posAtual = c.Position
+    local sizeAtual = c.Size
+    local topoY = posAtual.Y.Offset - sizeAtual.Y.Offset * c.AnchorPoint.Y
+    local novoY = topoY + novaAltura * c.AnchorPoint.Y
+    local tween = TweenService:Create(c,
+        TweenInfo.new(duracao, estilo, direcao), {
+            Size = UDim2.new(sizeAtual.X.Scale, sizeAtual.X.Offset, 0, novaAltura),
+            Position = UDim2.new(posAtual.X.Scale, posAtual.X.Offset, posAtual.Y.Scale, novoY)
+        })
+    tween:Play()
+    return tween
+end
+
+local function abrirPainel()
+    if panelOpen or animando then return end
+    animando = true
+    c.Visible = true
+    c.Size = TAM_FECHADO
+    c.Position = posicaoBase
+    panelMinimizado = false
+    f.Visible = true
+    u.Text = "-"
+    u.BackgroundColor3 = p
+    local tween = TweenService:Create(c,
+        TweenInfo.new(0.45,Enum.EasingStyle.Back,Enum.EasingDirection.Out),
+        {Size=TAM_ABERTO, Position=posicaoBase})
+    tween:Play()
+    tween.Completed:Connect(function()
+        animando = false
+        panelOpen = true
+    end)
+end
+
+local function fecharPainel()
+    if not panelOpen or animando then return end
+    animando = true
+    posicaoBase = c.Position
+    local posAtual = c.Position
+    local centroY = posAtual.Y.Offset
+    local tween = TweenService:Create(c,
+        TweenInfo.new(0.25,Enum.EasingStyle.Back,Enum.EasingDirection.In), {
+            Size = TAM_FECHADO,
+            Position = UDim2.new(posAtual.X.Scale, posAtual.X.Offset, posAtual.Y.Scale, centroY)
+        })
+    tween:Play()
+    tween.Completed:Connect(function()
+        c.Visible = false
+        animando = false
+        panelOpen = false
+    end)
+end
+
+-- Animação inicial
+c.Size = TAM_FECHADO
+panelOpen = false
+task.spawn(function()
+    task.wait(0.15)
+    animando = true
+    local tw = TweenService:Create(c,
+        TweenInfo.new(0.55,Enum.EasingStyle.Back,Enum.EasingDirection.Out),
+        {Size=TAM_ABERTO})
+    tw:Play()
+    tw.Completed:Connect(function()
+        animando = false
+        panelOpen = true
+    end)
+end)
+
+-- ⌨️ TAB
+j.InputBegan:Connect(function(input,processado)
+    if input.KeyCode == Enum.KeyCode.Tab then
+        if panelOpen then
+            fecharPainel()
+        else
+            abrirPainel()
+        end
+    end
+end)
+
+-- ✅ MINIMIZAR / MAXIMIZAR com animação
+u.MouseButton1Click:Connect(function()
+    if animando then return end
+    if not panelMinimizado then
+        animando = true
+        u.Text = "+"
+        u.BackgroundColor3 = q
+        local tw = animarAltura(35, 0.35, Enum.EasingStyle.Back, Enum.EasingDirection.Out)
+        tw.Completed:Connect(function()
+            f.Visible = false
+            animando = false
+            panelMinimizado = true
+        end)
+    else
+        animando = true
+        f.Visible = true
+        u.Text = "-"
+        u.BackgroundColor3 = p
+        local tw = animarAltura(395, 0.4, Enum.EasingStyle.Back, Enum.EasingDirection.Out)
+        tw.Completed:Connect(function()
+            animando = false
+            panelMinimizado = false
+        end)
+    end
+end)
+
+-- ═══════════════════════════════════════════
+-- OLD ANIMATION
+-- ═══════════════════════════════════════════
+local W = false
+v.MouseButton1Click:Connect(function()
+    W = not W
+    if W then
+        game.Workspace.Retargeting = Enum.AnimatorRetargetingMode.Disabled
+        v.Text = "Old Animation: Ativado"
+        v.BackgroundColor3 = q
+    else
+        game.Workspace.Retargeting = Enum.AnimatorRetargetingMode.Default
+        v.Text = "Old Animation: Desativado"
+        v.BackgroundColor3 = p
+    end
+end)
+
+-- ═══════════════════════════════════════════
+-- SPEED GLITCH
+-- ═══════════════════════════════════════════
+local G = false
+local K = {}
+local H = {WaterBalloon2024=true, SnowballToy2020=true, IceCream=true}
+local function B(char)
+    local hum = char:WaitForChild("Humanoid")
+    local hrp = char:WaitForChild("HumanoidRootPart")
+    if char:FindFirstChild("GlitchPart") then char.GlitchPart:Destroy() end
+    local gp = Instance.new("Part")
+    gp.Name = "GlitchPart"
+    gp.Size = Vector3.new(2,2,2)
+    gp.Transparency = 1
+    gp.CanCollide = false
+    gp.CanTouch = false
+    gp.CanQuery = false
+    gp.Parent = char
+    local weld = Instance.new("Weld")
+    weld.Part0 = hrp
+    weld.Part1 = gp
+    weld.Parent = gp
+    local function setOffset(offset) weld.C0 = CFrame.new(0,0,offset) end
+    local current = nil
+    local active = false
+    local offsetVal = 0
+    local currentTool = nil
+    local climbing = false
+    local inAnim = false
+    local wasTool = false
+    local animMap = {
+        ["http://www.roblox.com/asset/?id=15609995579"] = "normal",
+        ["rbxassetid://15609995579"] = "normal",
+        ["rbxassetid://107481557610007"] = "forte"
+    }
+    local function activate(v) active = true offsetVal = v gp.Transparency = 1 setOffset(v) end
+    local function reset() active = false climbing = false offsetVal = 0 inAnim = false wasTool = false gp.Transparency = 1 setOffset(0) end
+    local conn1 = hum.AnimationPlayed:Connect(function(track)
+        if track.Animation then
+            local tipo = animMap[track.Animation.AnimationId]
+            if tipo then
+                current = tipo
+                offsetVal = 0
+                inAnim = false
+                wasTool = false
+                track.Stopped:Connect(function()
+                    current = nil
+                    inAnim = true
+                    wasTool = currentTool ~= nil
+                end)
+            end
+        end
+    end)
+    local conn2 = char.ChildRemoved:Connect(function(child)
+        if H[child.Name] then
+            if current == "normal" then offsetVal = 10.5
+            elseif current == "forte" then offsetVal = 26.5 end
+            if active then setOffset(offsetVal) end
+        end
+        if child:IsA("Tool") then
+            if child == currentTool then
+                currentTool = nil
+                if inAnim and wasTool then
+                    inAnim = false; wasTool = false; reset()
+                elseif not current and not H[child.Name] then
+                    reset()
+                end
+            end
+        end
+    end)
+    local conn3 = char.ChildAdded:Connect(function(child)
+        if child:IsA("Tool") then
+            currentTool = child
+            if inAnim and not wasTool then inAnim = false; reset(); return end
+            local isClimbing = hum:GetState() == Enum.HumanoidStateType.Climbing
+            if isClimbing then
+                climbing = true; active = true; setOffset(3.5)
+            elseif current == "normal" then
+                if offsetVal > 0 then activate(offsetVal) else activate(7.5) end
+            elseif current == "forte" then
+                if offsetVal > 0 then activate(offsetVal) else activate(10.5) end
+            end
+        end
+    end)
+    table.insert(K, conn1); table.insert(K, conn2); table.insert(K, conn3)
+    task.spawn(function()
+        while char.Parent and G do
+            task.wait(.05)
+            if active then
+                if climbing then setOffset(3.5) else setOffset(offsetVal) end
+            end
+        end
+    end)
+end
+local t = nil
+x.MouseButton1Click:Connect(function()
+    G = not G
+    if G then
+        x.Text = "Speed: Ativado"
+        x.BackgroundColor3 = q
+        if M.Character then B(M.Character) end
+        t = M.CharacterAdded:Connect(B)
+    else
+        x.Text = "Speed: Desativado"
+        x.BackgroundColor3 = p
+        if t then t:Disconnect() t = nil end
+        for _, conn in ipairs(K) do conn:Disconnect() end
+        table.clear(K)
+        if M.Character and M.Character:FindFirstChild("GlitchPart") then
+            M.Character.GlitchPart:Destroy()
+        end
+    end
+end)
+
+-- ═══════════════════════════════════════════
+-- SOUND GUN
+-- ═══════════════════════════════════════════
+local s = false
+local m = {}
+local a = nil
+local l = nil
+local h = "rbxassetid://6968135315"
+local I = "Gun"
+local S = 2
+local function d(char)
+    if not s then return end
+    local hum = char:WaitForChild("Humanoid",10)
+    local animator = hum and hum:WaitForChild("Animator",10)
+    local lastTime = 0
+    if animator then
+        local conn = animator.AnimationPlayed:Connect(function(track)
+            local tool = char:FindFirstChildOfClass("Tool")
+            local isGun = (tool and tool.Name == I)
+            local elapsed = os.clock() - lastTime
+            local recent = elapsed <= S
+            if isGun or recent then
+                if track.Priority == Enum.AnimationPriority.Action then track:Stop() end
+            end
+        end)
+        table.insert(m, conn)
+    end
+    local conn2 = char.ChildAdded:Connect(function(child)
+        if child:IsA("Tool") and child.Name == I then
+            if a then a:Play() end
+        end
+    end)
+    local conn3 = char.ChildRemoved:Connect(function(child)
+        if child:IsA("Tool") and child.Name == I then
+            if a then a:Play() end
+            lastTime = os.clock()
+        end
+    end)
+    table.insert(m, conn2); table.insert(m, conn3)
+end
+J.MouseButton1Click:Connect(function()
+    s = not s
+    if s then
+        J.Text = "Sound Gun: Ativado"
+        J.BackgroundColor3 = q
+        if not a then
+            a = Instance.new("Sound")
+            a.SoundId = h
+            a.Volume = 1
+            a.Parent = i
+        end
+        if M.Character then d(M.Character) end
+        l = M.CharacterAdded:Connect(d)
+    else
+        J.Text = "Sound Gun: Desativado"
+        J.BackgroundColor3 = p
+        if l then l:Disconnect() l = nil end
+        for _, conn in ipairs(m) do conn:Disconnect() end
+        table.clear(m)
+        if a then a:Destroy() a = nil end
+    end
+end)
+
+-- ═══════════════════════════════════════════
+-- OLD SHIFT
+-- ═══════════════════════════════════════════
+local n = false
+local y = nil
+local b = false
+local D = Vector3.new(.9,1.1,0)
+local L = Vector3.new(0,0,0)
+local function C()
+    if y then y:Disconnect() y = nil end
+    b = false
+    if M.Character and M.Character:FindFirstChild("Humanoid") then
+        M.Character.Humanoid.CameraOffset = L
+    end
+end
+local function A()
+    C()
+    y = Y.RenderStepped:Connect(function()
+        if not M.Character or not M.Character:FindFirstChild("Humanoid") then return end
+        local hum = M.Character.Humanoid
+        if j.MouseBehavior == Enum.MouseBehavior.LockCenter then
+            if not b then b = true hum.CameraOffset = D end
+        else
+            if b then b = false hum.CameraOffset = L end
+        end
+    end)
+end
+R.MouseButton1Click:Connect(function()
+    n = not n
+    if n then
+        R.Text = "Old Shift: Ativado"
+        R.BackgroundColor3 = q
+        A()
+    else
+        R.Text = "Old Shift: Desativado"
+        R.BackgroundColor3 = p
+        C()
+    end
+end)
+M.CharacterAdded:Connect(function(_char) if n then task.wait(.1) A() end end)
+
+-- ═══════════════════════════════════════════
+-- CAMERA OLD
+-- ═══════════════════════════════════════════
+local O = false
+local Ee = nil
+local ie = workspace.CurrentCamera
+local Ye = .3
+local function je() return ((ie.Focus.Position - ie.CFrame.Position)).Magnitude < 1 end
+e.MouseButton1Click:Connect(function()
+    O = not O
+    if O then
+        e.Text = "Camera Old: Ativado"
+        e.BackgroundColor3 = q
+        Ee = Y.RenderStepped:Connect(function()
+            if not je() then
+                local cf = ie.CFrame
+                ie.CFrame = cf + Vector3.new(0,Ye,0)
+            end
+        end)
+    else
+        e.Text = "Camera Old: Desativado"
+        e.BackgroundColor3 = p
+        if Ee then Ee:Disconnect() Ee = nil end
+    end
+end)
+
+-- ═══════════════════════════════════════════
+-- CONFETE
+-- ═══════════════════════════════════════════
+local oe = false
+local ke = 1.5
+local Me = 5.0
+local function Ue()
+    if not oe then return end
+    pcall(function()
+        o.IncomingReplicationLag = Me
+        o.OutgoingReplicationLag = Me
+    end)
+    local startTime = tick()
+    local conn
+    conn = Y.RenderStepped:Connect(function()
+        if tick() - startTime < ke then
+            task.wait(math.random(.05,.15))
+        else
+            conn:Disconnect()
+        end
+    end)
+    task.delay(ke,function()
+        pcall(function()
+            o.IncomingReplicationLag = 0
+            o.OutgoingReplicationLag = 0
+        end)
+    end)
+end
+local function pe(char)
+    local hum = char:WaitForChild("Humanoid",5)
+    if not hum then return end
+    hum.Died:Connect(function() Ue() end)
+end
+for _, plr in ipairs(E:GetPlayers()) do
+    if plr.Character then pe(plr.Character) end
+    plr.CharacterAdded:Connect(pe)
+end
+E.PlayerAdded:Connect(function(plr) plr.CharacterAdded:Connect(pe) end)
+local function qe()
+    oe = not oe
+    if oe then
+        w.Text = "Confete: At
